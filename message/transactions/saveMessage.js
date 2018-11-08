@@ -1,6 +1,6 @@
 const database = require("../database");
 const Message = require("../models/message");
-const { cleanClone } = require("../../src/utils");
+const { cleanClone } = require("../utils");
 
 function saveMessageReplica(replica, retries) {
   if (retries > 0) {
