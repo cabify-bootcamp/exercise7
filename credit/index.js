@@ -2,7 +2,8 @@ const http = require("http");
 const express = require("express");
 const bodyParser = require("body-parser");
 const { Validator, ValidationError } = require("express-json-validator-middleware");
-const updateCredit = require("./src/controllers/updateCredit");
+const updateCredit = require("./controllers/updateCredit");
+const getCredit = require("./controllers/getCredit");
 const app = express();
 
 const validator = new Validator({ allErrors: true });
@@ -26,6 +27,11 @@ app.post(
   bodyParser.json(),
   validate({ body: creditSchema }),
   updateCredit
+);
+
+app.get(
+  "/credit",
+  getCredit
 );
 
 app.use(function(err, req, res, next) {
