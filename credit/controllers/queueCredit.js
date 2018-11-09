@@ -6,12 +6,12 @@ var Queue = require('bull');
 const updateCreditQueue = new Queue('creditQueue');
 
 
-const queueCredit = function(req, res, next) {
+// const queueCredit = function(req, res, next) {
 
-    let messageObj = req.body;
-    return updateCreditQueue.add(messageObj).then( () => res.status(200).send('Added to queue'))
+//     let messageObj = req.body;
+//     return updateCreditQueue.add(messageObj).then( () => res.status(200).send('Added to queue'))
 
-}
+// }
 
 updateCreditQueue.process(async (job, done) => {
     await updateCredit({...job.data})
