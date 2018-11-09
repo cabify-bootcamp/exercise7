@@ -1,7 +1,7 @@
 const getCredit = require("../clients/getCredit");
 
 module.exports = function() {
-    getCredit().then(credit => {
-        res.json(credit);
+    return getCredit().then(credit => {
+        return credit[0].amount
       });
 };

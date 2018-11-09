@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const { Validator, ValidationError } = require("express-json-validator-middleware");
 const updateCredit = require("./controllers/updateCredit");
 const getCredit = require("./controllers/getCredit");
+const {processCreditCheck} = require("./controllers/processCreditCheck");
 const app = express();
 
 const validator = new Validator({ allErrors: true });
@@ -42,6 +43,7 @@ app.use(function(err, req, res, next) {
     res.sendStatus(500);
   }
 });
+
 
 app.listen(9017, function() {
   console.log("App started on PORT 9017");
