@@ -19,7 +19,7 @@ const queueMessage = function(req, res, next) {
     saveMessage(messageObj)
     
     return messageQueue.add(messageObj).then( () => res.status(200).send(`Message send successfully, you can check the your message status using /messages/${uuid}/status`))
-
+    
 }
 
 messageQueue.process(async (job, done) => {

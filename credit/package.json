@@ -1,7 +1,7 @@
 {
-  "name": "exercise7",
+  "name": "credit",
   "version": "1.0.0",
-  "description": "Cabify bootcamp exercise 7",
+  "description": "credit app",
   "repository": {
     "type": "git",
     "url": "git://github.com/cabify/backend-bootcamp.git"
