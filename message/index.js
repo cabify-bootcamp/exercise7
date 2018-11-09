@@ -2,11 +2,11 @@ const http = require("http");
 const express = require("express");
 const bodyParser = require("body-parser");
 const { Validator, ValidationError } = require("express-json-validator-middleware");
-const { queueMessage } = require("./controllers/queueMessage");
-const  {queueCreditCheck}  = require("./controllers/queueCreditCheck");
+const { queueCreditCheck }  = require("./controllers/queueCredit");
 const getMessages = require("./controllers/getMessages");
 const getMessageStatus = require("./controllers/getMessageStatus");
 
+require("./controllers/queueTx");
 
 const app = express();
 

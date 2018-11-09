@@ -4,8 +4,10 @@ const bodyParser = require("body-parser");
 const { Validator, ValidationError } = require("express-json-validator-middleware");
 const updateCredit = require("./controllers/updateCredit");
 const getCredit = require("./controllers/getCredit");
-const {processCreditCheck} = require("./controllers/processCreditCheck");
+
 const app = express();
+
+require("./controllers/queueCredit");
 
 const validator = new Validator({ allErrors: true });
 const { validate } = validator;

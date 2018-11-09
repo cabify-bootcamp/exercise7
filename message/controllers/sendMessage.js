@@ -4,16 +4,16 @@ const saveMessage = require("../clients/saveMessage");
 
 const random = n => Math.floor(Math.random() * Math.floor(n));
 
-module.exports = function(message) {
+module.exports = function(message, credit) {
   const messageContent = message
   const messageJSON = JSON.stringify(message);
   // var query = getCredit();
 
   // query.exec(function(err, credit) {
-    if (err) return console.log(err);
+    // if (err) return console.log(err);
 
     // current_credit = credit[0].amount;
-    current_credit = 10
+    current_credit = credit
 
     if (current_credit > 0) {
       const postOptions = {

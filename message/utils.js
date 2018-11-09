@@ -5,7 +5,6 @@ function cleanClone(document) {
 
   return copy;
 }
-
 module.exports = {
   cleanClone
 };
