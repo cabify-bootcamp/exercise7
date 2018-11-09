@@ -1,5 +1,4 @@
 const Message = require("../models/message");
-const updateCreditTransaction = require("../transactions/updateCredit");
 const saveMessageTransaction = require("../transactions/saveMessage");
 const { queueTx } = require("../controllers/queueTx");
 
