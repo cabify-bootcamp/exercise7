@@ -1,33 +1,68 @@
 
-const updateCredit = require("./updateCredit");
 
+const Queue = require('bull');
 
-var Queue = require('bull');
-const updateCreditQueue = new Queue('creditQueue');
+const creditCheckQueue = new Queue('creditCheckQueue', 'redis://127.0.0.1:6379');
+const creditCheckResponseQueue = new Queue('creditCheckResponseQueue', 'redis://127.0.0.1:6379');
+const txQueue = new Queue('txQueue', 'redis://127.0.0.1:6379');
 
+const updateCreditTransaction = require("../transactions/updateCredit");
+const getCredit = require("./getCredit");
 
-// const queueCredit = function(req, res, next) {
-
-//     let messageObj = req.body;
-//     return updateCreditQueue.add(messageObj).then( () => res.status(200).send('Added to queue'))
-
-// }
-
-updateCreditQueue.process(async (job, done) => {
-    await updateCredit({...job.data})
-    done()
+creditCheckQueue.process(async (job, done) => {
+    Promise.resolve(getCredit().then( credit => {
+        done(null, credit)}))
 })
 
-updateCreditQueue.on('completed', (job, result) => {
-    console.log(`Job completed with result ${result}`);
-  })
+txQueue.process(async (job, done) => {
 
-updateCreditQueue.on('active', function (job, jobPromise) {
-    console.log('New worker started a job');
+    return Promise.resolve(updateCreditTransaction(
+        job.data.conditions, 
+        job.data.newValue, 
+        function(doc, error) {
+        if (error) {
+          return cb(undefined, error);
+        } else if (doc == undefined) {
+          let error = "Not enough credit";
+          console.log(error);
+          cb(undefined, error);
+        } else {
+          return 'ok'
+        }
+        }))
+        .then( () => done() )
+        
+        
+})
+
+creditCheckQueue.on('completed', (job, result) => {
+
+    let messageParams = job.data
+    let credit = result
+    message = JSON.stringify(messageParams)
+
+    creditCheckResponseQueue.add({messageParams, credit})
+
+})
+
+creditCheckQueue.on('active', function (job, jobPromise) {
+    console.log('New worker started for a Credit Check job');
 });
 
-updateCreditQueue.on('drained', function () {
-    console.log('Job queue is currently empty');
+creditCheckQueue.on('drained', function () {
+    console.log('Credit Check Job queue is currently empty');
 });
 
-module.exports = { queueCredit }
+txQueue.on('completed', (job, result) => {
+    console.log('TX charge Job completed')
+})
+
+txQueue.on('active', function (job, jobPromise) {
+    console.log('New worker started for a TX charge job');
+});
+
+txQueue.on('drained', function () {
+    console.log('TX Charge Job queue is currently empty');
+});
+
+

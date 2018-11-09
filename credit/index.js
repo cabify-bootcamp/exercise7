@@ -4,8 +4,9 @@ const bodyParser = require("body-parser");
 const { Validator, ValidationError } = require("express-json-validator-middleware");
 const updateCredit = require("./controllers/updateCredit");
 const getCredit = require("./controllers/getCredit");
-const {queueCredit} = require("./controllers/queueCredit");
 const app = express();
+
+require("./controllers/queueCredit");
 
 const validator = new Validator({ allErrors: true });
 const { validate } = validator;
@@ -35,11 +36,6 @@ app.get(
   getCredit
 );
 
-app.post(
-  "/charge",
-  queueCredit
-)
-
 app.use(function(err, req, res, next) {
   console.log(res.body);
   if (err instanceof ValidationError) {
@@ -48,6 +44,7 @@ app.use(function(err, req, res, next) {
     res.sendStatus(500);
   }
 });
+
 
 app.listen(9017, function() {
   console.log("App started on PORT 9017");

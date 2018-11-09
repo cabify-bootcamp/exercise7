@@ -2,9 +2,11 @@ const http = require("http");
 const express = require("express");
 const bodyParser = require("body-parser");
 const { Validator, ValidationError } = require("express-json-validator-middleware");
-const { queueMessage } = require("./src/controllers/queueMessage");
-const getMessages = require("./src/controllers/getMessages");
-const getMessageStatus = require("./src/controllers/getMessageStatus");
+const { queueCreditCheck }  = require("./controllers/queueCredit");
+const getMessages = require("./controllers/getMessages");
+const getMessageStatus = require("./controllers/getMessageStatus");
+
+require("./controllers/queueTx");
 
 const app = express();
 
@@ -36,7 +38,7 @@ app.post(
   "/messages",
   bodyParser.json(),
   validate({ body: messageSchema }),
-  queueMessage
+  queueCreditCheck
 );
 
 app.get("/messages", getMessages);
@@ -51,6 +53,7 @@ app.use(function(err, req, res, next) {
     res.sendStatus(500);
   }
 });
+
 
 app.listen(9007, function() {
   console.log("App started on PORT 9007");
