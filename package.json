@@ -1,7 +1,7 @@
 {
-  "name": "credit",
+  "name": "exercise7",
   "version": "1.0.0",
-  "description": "credit app",
+  "description": "messaging app",
   "repository": {
     "type": "git",
     "url": "git://github.com/cabify/backend-bootcamp.git"
